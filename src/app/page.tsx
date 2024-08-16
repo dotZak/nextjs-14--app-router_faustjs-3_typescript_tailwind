@@ -1,19 +1,34 @@
-import { getClient } from '@faustwp/experimental-app-router';
-import { gql } from '@apollo/client';
-import Link from 'next/link';
+import { getClient } from "@faustwp/experimental-app-router";
+import { gql } from "@apollo/client";
+import { WPBlocksViewer } from "./WPBlocksViewer";
 
 const GET_FRONT_PAGE_QUERY = gql`
   query GetFrontPage {
     page(id: "/", idType: URI) {
+      title
+      content
       editorBlocks {
-        apiVersion
-        blockEditorCategoryName
-        clientId
-        cssClassNames
-        isDynamic
+        __typename
         name
-        parentClientId
+        id: clientId
+        parentId: parentClientId
         renderedHtml
+        ... on CoreColumns {
+          attributes {
+            className
+          }
+        }
+        ... on CoreColumn {
+          attributes {
+            className
+          }
+        }
+        ... on CoreParagraph {
+          attributes {
+            content
+            className
+          }
+        }
       }
     }
   }
@@ -26,13 +41,15 @@ export default async function Home() {
     query: GET_FRONT_PAGE_QUERY,
   });
 
+  const { title, editorBlocks } = data.page;
+
   return (
     <>
       <header>
-        <h1>Posts</h1>
+        <h1>{title}</h1>
       </header>
       <main>
-        <div dangerouslySetInnerHTML={{ __html: data }} />
+        <WPBlocksViewer blocks={editorBlocks} />
       </main>
     </>
   );

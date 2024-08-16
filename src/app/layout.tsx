@@ -8,6 +8,8 @@ import "@/../faust.config.mjs";
 import { FaustProvider } from "@faustwp/experimental-app-router/ssr";
 import { AppNavMenuList } from "@/components/app-nav-menu-list";
 import { cn } from "@/lib/cn";
+import WPBlocksProvider from "./WPBlocksProvider";
+import blocks from "@/wp-blocks";
 
 export type WPMenu = {
   __typename?: "Menu";
@@ -115,30 +117,33 @@ export default async function RootLayout({
           flexDirection: "column", // Sticky footer
           minHeight: "100svh", // Sticky footer
           minWidth: 0, // Fix horizontal overflow caused by flex
-        }}>
+        }}
+      >
         <a href="#MainContent">Skip to main content</a>
         <FaustProvider>
-          <TopBar navLabel={data.primaryMenu.name}>
-            <MastHead />
+          <WPBlocksProvider config={{ blocks, theme: null }}>
+            <TopBar navLabel={data.primaryMenu.name}>
+              <MastHead />
 
-            {data.primaryMenu && (
-              <AppNavMenuList menu={data.primaryMenu as WPMenu} />
-            )}
-          </TopBar>
+              {data.primaryMenu && (
+                <AppNavMenuList menu={data.primaryMenu as WPMenu} />
+              )}
+            </TopBar>
 
-          <div id="MainContent" style={{ flex: "1" }}>
-            {children}
-          </div>
+            <div id="MainContent" style={{ flex: "1" }}>
+              {children}
+            </div>
 
-          <BottomBar>
-            {data.footerMenu && (
-              <nav aria-label={data.footerMenu.name}>
-                <AppNavMenuList menu={data.footerMenu as WPMenu} />
-              </nav>
-            )}
+            <BottomBar>
+              {data.footerMenu && (
+                <nav aria-label={data.footerMenu.name}>
+                  <AppNavMenuList menu={data.footerMenu as WPMenu} />
+                </nav>
+              )}
 
-            <Colophon />
-          </BottomBar>
+              <Colophon />
+            </BottomBar>
+          </WPBlocksProvider>
         </FaustProvider>
       </body>
     </html>
@@ -159,7 +164,8 @@ const TopBar = ({
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
-        }}>
+        }}
+      >
         {children}
       </div>
     </nav>
@@ -173,7 +179,8 @@ const BottomBar = ({ children }: { children: React.ReactNode }) => {
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
-      }}>
+      }}
+    >
       {children}
     </div>
   );
