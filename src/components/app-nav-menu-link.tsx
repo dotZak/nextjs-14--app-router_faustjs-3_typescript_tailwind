@@ -22,7 +22,8 @@ export default function AppNavMenuLink({
         style={{
           fontWeight: isActivePath(menuItem.uri) ? "bold" : "normal",
         }}
-        {...rest}>
+        {...rest}
+      >
         {menuItem.label}
       </Link>
       {children}

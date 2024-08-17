@@ -1,6 +1,6 @@
 const flatListToHierarchical = (
   data = [],
-  { idKey = 'key', parentKey = 'parentId', childrenKey = 'children' } = {},
+  { idKey = "key", parentKey = "parentId", childrenKey = "children" } = {}
 ) => {
   const tree: unknown[] = [];
   const childrenOf = {};
