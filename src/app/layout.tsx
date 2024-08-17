@@ -3,13 +3,16 @@ import { Roboto_Flex, Lora } from "next/font/google";
 import "./globals.scss";
 import { gql } from "@apollo/client";
 import { getClient } from "@faustwp/experimental-app-router";
-import Link from "next/link";
 import "@/../faust.config.mjs";
 import { FaustProvider } from "@faustwp/experimental-app-router/ssr";
 import { AppNavMenuList } from "@/components/app-nav-menu-list";
 import { cn } from "@/lib/cn";
-import WPBlocksProvider from "./WPBlocksProvider";
+import WPBlocksProvider from "../components/WPBlocksProvider";
 import blocks from "@/wp-blocks";
+import { BottomBar } from "../components/BottomBar";
+import { Colophon } from "../components/Colophon";
+import { MastHead } from "../components/MastHead";
+import { TopBar } from "../components/TopBar";
 
 export type WPMenu = {
   __typename?: "Menu";
@@ -98,15 +101,6 @@ export default async function RootLayout({
     `,
   });
 
-  const MastHead = () => {
-    return (
-      <div>
-        <Link href="/">{data.generalSettings.title}</Link>
-        <p>{data.generalSettings.description}</p>
-      </div>
-    );
-  };
-
   return (
     <html lang="en">
       <body
@@ -123,7 +117,10 @@ export default async function RootLayout({
         <FaustProvider>
           <WPBlocksProvider config={{ blocks, theme: null }}>
             <TopBar navLabel={data.primaryMenu.name}>
-              <MastHead />
+              <MastHead
+                title={data.generalSettings.title as string}
+                description={data.generalSettings.description as string}
+              />
 
               {data.primaryMenu && (
                 <AppNavMenuList menu={data.primaryMenu as WPMenu} />
@@ -149,45 +146,3 @@ export default async function RootLayout({
     </html>
   );
 }
-
-const TopBar = ({
-  navLabel,
-  children,
-}: {
-  navLabel?: string;
-  children: React.ReactNode;
-}) => {
-  return (
-    <nav aria-label={navLabel ?? "Main"}>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
-        {children}
-      </div>
-    </nav>
-  );
-};
-
-const BottomBar = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-      }}
-    >
-      {children}
-    </div>
-  );
-};
-
-const Colophon = () => {
-  const currentYear = new Date().getFullYear();
-
-  return <footer>© {currentYear}</footer>;
-};

@@ -1,4 +1,4 @@
-import { PleaseLogin } from "@/components/please-login";
+import { PleaseLogin } from "@/components/PleaseLogin";
 import { gql } from "@apollo/client";
 import { getAuthClient, onLogout } from "@faustwp/experimental-app-router";
 

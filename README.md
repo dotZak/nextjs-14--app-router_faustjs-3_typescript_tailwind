@@ -16,6 +16,6 @@ It's a standard next project.
 
 1. Pull it down and use `npm i` to install the dependencies.
 2. Copy _.env.sample_ to _.env.local_ and update the three values in there.
-  - NEXT_PUBLIC_WORDPRESS_URL
-  - NEXT_PUBLIC_URL
-  - FAUST_SECRET_KEY
+  - `NEXT_PUBLIC_WORDPRESS_URL`
+  - `NEXT_PUBLIC_URL`
+  - `FAUST_SECRET_KEY`

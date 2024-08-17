@@ -1,6 +1,6 @@
 import { getClient } from "@faustwp/experimental-app-router";
 import { gql } from "@apollo/client";
-import { WPBlocksViewer } from "./WPBlocksViewer";
+import { WPBlocksViewer } from "../components/WPBlocksViewer";
 
 const GET_FRONT_PAGE_QUERY = gql`
   query GetFrontPage {

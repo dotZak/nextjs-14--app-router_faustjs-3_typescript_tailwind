@@ -2,7 +2,6 @@
 import { WPMenuItem } from "@/app/layout";
 import { useActivePath } from "@/lib/useActivePath";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 export default function AppNavMenuLink({
   menuItem,
@@ -12,7 +11,6 @@ export default function AppNavMenuLink({
   menuItem: WPMenuItem;
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
   const isActivePath = useActivePath();
   return (
     <>
