@@ -5,9 +5,9 @@ import { PleaseLogin } from "@/components/please-login";
 
 export default async function Page(props) {
   const isPreview = hasPreviewProps(props);
-  const id = isPreview ? props.searchParams.p : props.params.slug;
+  const id = isPreview ? props.searchParams.p : props.params.slug.join("/");
 
-  let client = isPreview ? await getAuthClient() : await getClient();
+  const client = isPreview ? await getAuthClient() : await getClient();
 
   if (!client) {
     return <PleaseLogin />;
@@ -26,6 +26,19 @@ export default async function Page(props) {
           }
           ... on NodeWithContentEditor {
             content
+          }
+          ... on NodeWithEditorBlocks {
+            editorBlocks {
+              __typename
+              name
+              id: clientId
+              parentId: parentClientId
+              apiVersion
+              blockEditorCategoryName
+              cssClassNames
+              isDynamic
+              renderedHtml
+            }
           }
           date
         }

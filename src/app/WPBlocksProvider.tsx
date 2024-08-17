@@ -2,7 +2,6 @@
 
 import { WordPressBlocksProvider } from "@faustwp/blocks";
 import { WordPressBlocksProviderConfig } from "@faustwp/blocks/dist/mjs/components/WordPressBlocksProvider";
-import { Suspense } from "react";
 
 function WPBlocksProvider({
   config,
@@ -12,11 +11,9 @@ function WPBlocksProvider({
   children?: React.ReactNode;
 }) {
   return (
-    <Suspense>
-      <WordPressBlocksProvider config={config}>
-        {children}
-      </WordPressBlocksProvider>
-    </Suspense>
+    <WordPressBlocksProvider config={config}>
+      {children}
+    </WordPressBlocksProvider>
   );
 }
 

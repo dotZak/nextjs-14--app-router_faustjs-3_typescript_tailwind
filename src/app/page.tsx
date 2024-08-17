@@ -12,23 +12,11 @@ const GET_FRONT_PAGE_QUERY = gql`
         name
         id: clientId
         parentId: parentClientId
+        apiVersion
+        blockEditorCategoryName
+        cssClassNames
+        isDynamic
         renderedHtml
-        ... on CoreColumns {
-          attributes {
-            className
-          }
-        }
-        ... on CoreColumn {
-          attributes {
-            className
-          }
-        }
-        ... on CoreParagraph {
-          attributes {
-            content
-            className
-          }
-        }
       }
     }
   }
