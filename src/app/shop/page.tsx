@@ -1,42 +1,53 @@
 "use client";
 
-import { gql, useQuery } from "@apollo/client";
+import { gql } from "@/__generated__";
+import { Product } from "@/__generated__/graphql";
+import { useQuery } from "@apollo/client";
 import Link from "next/link";
 
-export default function ShopPage() {
-  const { data, error, loading } = useQuery(gql`
-    query GetShopPage {
-      products {
-        found
-        edges {
-          cursor
-          node {
-            __typename
-            key: id
-            name
-            sku
-            shortDescription
-            featured
-            onSale
-            purchasable
-            ... on UniformResourceIdentifiable {
-              uri
-            }
-            ... on SimpleProduct {
-              content
-              uri
-              price
-            }
-            ... on VariableProduct {
-              content
-              uri
-              price
-            }
+const GET_PRODUCTS = gql(`
+  query GetProducts {
+    products {
+      pageInfo {
+        hasPreviousPage
+        hasNextPage
+        startCursor
+        endCursor
+      }
+      found
+      nodes {
+        id
+        databaseId
+        slug
+        name
+        type
+        ... on ProductUnion {
+          shortDescription(format: RAW)
+        }
+        image {
+          ... on MediaItem {
+            id
+            sourceUrl(size:WOOCOMMERCE_THUMBNAIL)
+            altText
           }
+        }
+        ... on ProductWithPricing {
+          price
+          regularPrice
+          salePrice
+        }
+        ... on InventoriedProduct {
+          stockStatus
+          stockQuantity
+          soldIndividually
         }
       }
     }
-  `);
+  }
+`);
+
+export default function ShopPage() {
+  const { data, error, loading } = useQuery(GET_PRODUCTS);
 
   if (error) {
     console.error("❌ Error:\n", error);
@@ -74,31 +85,10 @@ export default function ShopPage() {
           </header>
           {data?.products && (
             <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {data?.products?.edges.map(({ node }) => {
+              {data?.products?.nodes.map((node) => {
                 return (
-                  <li key={node.key}>
-                    <article className="card flex flex-col items-center gap-y-4 px-4 py-4">
-                      <header>
-                        <h2>{node.name}</h2>
-                        <p>{node.__typename}</p>
-                      </header>
-                      <section>
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: node.shortDescription,
-                          }}
-                        />
-                        <div dangerouslySetInnerHTML={{ __html: node.price }} />
-                      </section>
-                      <footer>
-                        <Link
-                          className="rounded-lg border border-solid border-gray-700 px-4 py-2"
-                          href={(node.uri as string) ?? ""}
-                        >
-                          Read More
-                        </Link>
-                      </footer>
-                    </article>
+                  <li key={node.id}>
+                    <ShopProductCard product={node as Product} />
                   </li>
                 );
               })}
@@ -110,3 +100,34 @@ export default function ShopPage() {
     </>
   );
 }
+
+const ShopProductCard: React.FC<{
+  product: Product;
+}> = ({ product }) => {
+  const { shortDescription, name, type, slug } = product;
+  console.log(product);
+  return (
+    <article className="card flex flex-col items-center gap-y-4 px-4 py-4">
+      <header>
+        <h2>{name}</h2>
+        <p>{type}</p>
+      </header>
+      <section>
+        <div
+          dangerouslySetInnerHTML={{
+            __html: shortDescription as string,
+          }}
+        />
+        {/* <div dangerouslySetInnerHTML={{ __html: price as string }} /> */}
+      </section>
+      <footer>
+        <Link
+          className="rounded-lg border border-solid border-gray-700 px-4 py-2"
+          href={`/shop/${slug as string}`}
+        >
+          Read More
+        </Link>
+      </footer>
+    </article>
+  );
+};

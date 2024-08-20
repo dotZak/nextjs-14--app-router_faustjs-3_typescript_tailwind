@@ -1,51 +1,51 @@
 "use client";
 
-import { gql, useQuery } from "@apollo/client";
+import { gql } from "@/__generated__";
+import { useQuery } from "@apollo/client";
 
-export default function ProductPage(props) {
-  const id = props.params.slug;
-
-  const { data, error, loading } = useQuery(
-    gql`
-      query ProductBySlug($id: ID = "", $idType: ProductIdTypeEnum = SLUG) {
-        product(id: $id, idType: $idType) {
-          __typename
-          id
-          slug
-          uri
-          content
-          name
-          ... on Product {
-            name
-            title
-          }
-          ... on ProductUnion {
-            name
-            shortDescription
-            sku
-            slug
-            onSale
-            featured
-          }
-          ... on SimpleProduct {
-            price
-            salePrice
-            regularPrice
-          }
-          ... on VariableProduct {
-            price
-            salePrice
-            regularPrice
-          }
-        }
+const GET_PRODUCT_BY_SLUG = gql(`
+  query ProductBySlug($id: ID = "", $idType: ProductIdTypeEnum = SLUG) {
+    product(id: $id, idType: $idType) {
+      __typename
+      id
+      slug
+      uri
+      content
+      name
+      ... on Product {
+        name
+        title
       }
-    `,
-    {
-      variables: {
-        id,
-      },
+      ... on ProductUnion {
+        name
+        shortDescription
+        sku
+        slug
+        onSale
+        featured
+      }
+      ... on SimpleProduct {
+        price
+        salePrice
+        regularPrice
+      }
+      ... on VariableProduct {
+        price
+        salePrice
+        regularPrice
+      }
     }
-  );
+  }
+`);
+
+export default function ProductPage({ params }: { params: { slug: string } }) {
+  const id = params.slug;
+
+  const { data, error, loading } = useQuery(GET_PRODUCT_BY_SLUG, {
+    variables: {
+      id,
+    },
+  });
 
   if (error) {
     console.error("❌ Error:\n", error);
