@@ -3,7 +3,7 @@ import { AppNavMenuItem } from "./app-nav-menu-item";
 import { WPMenu, WPMenuItem } from "@/app/layout";
 
 export function AppNavMenuList({ menu }: { menu: WPMenu }) {
-  const menuItems = flatListToHierarchical(menu.menuItems.nodes);
+  const menuItems: WPMenuItem[] = flatListToHierarchical(menu.menuItems.nodes);
 
   return (
     <ul>
