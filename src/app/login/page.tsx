@@ -28,42 +28,40 @@ export default function Page() {
           </div>
           <fieldset>
             <legend>Account Credentials</legend>
-            <label htmlFor="username">
-              Username or email address
-              <span aria-hidden="true"> (required)</span>
-            </label>
-            <input
-              id="username"
-              name="usernameEmail"
-              type="text"
-              inputMode="email"
-              autoComplete="username"
-              autoCorrect="off"
-              autoCapitalize="off"
-              spellCheck="false"
-              required
-              aria-required="true"
-              aria-describedby="loginFormMessage"
-            />
-            <br />
-            <label htmlFor="current-password">
-              Password
-              <span aria-hidden="true"> (required)</span>
-            </label>
-            <input
-              id="current-password"
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              autoCorrect="off"
-              autoCapitalize="off"
-              spellCheck="false"
-              required
-              aria-required="true"
-              aria-describedby="loginFormMessage"
-            />
+            <div>
+              <label htmlFor="username">
+                Username or email address
+                <span aria-hidden="true"> (required)</span>
+              </label>
+              <input
+                id="username"
+                name="usernameEmail"
+                type="text"
+                inputMode="email"
+                autoComplete="username"
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck="false"
+                required
+                aria-describedby="loginFormMessage"
+              />
+            </div>
+            <div>
+              <label htmlFor="current-password">
+                Password
+                <span aria-hidden="true"> (required)</span>
+              </label>
+              <input
+                id="current-password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                aria-describedby="loginFormMessage"
+              />
+            </div>
             {/*
-            [1] Use `aria-hidden=true` on `label > span` when using `input[aria-required=true]` to label 
+            [1] Use `aria-hidden=true` on `label > span` when using `input[required]` to label 
                 required `input`s to prevent screen readers from reading "required" twice.
                   - See: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-required
 
@@ -81,9 +79,10 @@ export default function Page() {
                 b. `input[autocomplete=current-password]` hint that this is the current password, not a password reset.
                   - See: https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete#detail_tokens
 
-            [6] a. `input[required]` is for interactivity
-                b. `input[aria-required=true]` is for accessibility, specifically screen readers.
-                c. `input[aria-describedby]` is for accessibility. It tells the user where to find messages related to
+            [6] a. `input[required]` is for interactivity and accessibility, specifically screen readers.
+                  - Do not use `aria-required="true"` as it is redundant with `required`.
+                  - See: https://html.spec.whatwg.org/multipage/input.html#the-required-attribute
+                b. `input[aria-describedby]` is for accessibility. It tells the user where to find messages related to
                     this input or form. In this form all messages populate to the same UI element, so all inputs
                     should be have the same `aria-describedby` value.
             */}
